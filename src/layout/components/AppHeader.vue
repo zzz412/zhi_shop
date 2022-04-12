@@ -27,14 +27,20 @@
       <!--头部第二行 搜索区域-->
       <div class="bottom">
           <h1 class="logoArea">
-              <a class="logo" title="智品汇" href="###" target="_blank">
+              <router-link class="logo" title="智品汇" to="/">
                   <img src="@/assets/images/zz_logo.jpg" alt="">
-              </a>
+              </router-link >
           </h1>
           <div class="searchArea">
               <form action="###" class="searchForm">
                   <input type="text" id="autocomplete" class="input-error input-xxlarge" />
-                  <button class="sui-btn btn-xlarge btn-danger" type="button">搜索</button>
+                  <button
+                    class="sui-btn btn-xlarge btn-danger"
+                    type="button"
+                    @click="$router.push('/search')"
+                  >
+                    搜索
+                  </button>
               </form>
           </div>
       </div>

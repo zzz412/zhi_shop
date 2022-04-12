@@ -8,7 +8,15 @@ Vue.use(VueRouter)
 const routes = [
   {
     path: '/',
-    component: Layout
+    component: Layout,
+    // 路由重定向到主页
+    redirect: '/home',
+    children: [
+      // 主页
+      { path: '/home', component: () => import('@/views/home') },
+      // 搜索页
+      { path: '/search', component: () => import('@/views/search') }
+    ]
   }
 ]
 
