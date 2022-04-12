@@ -1,6 +1,7 @@
 <template>
   <div class="search-view">
-    <h1>搜索页面</h1>
+    <!-- 通过$route.params -->
+    <h1>搜索页面 {{$route.params}}</h1>
   </div>
 </template>
 

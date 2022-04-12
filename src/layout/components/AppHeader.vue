@@ -32,16 +32,22 @@
               </router-link >
           </h1>
           <div class="searchArea">
-              <form action="###" class="searchForm">
-                  <input type="text" id="autocomplete" class="input-error input-xxlarge" />
-                  <button
-                    class="sui-btn btn-xlarge btn-danger"
-                    type="button"
-                    @click="$router.push('/search')"
-                  >
-                    搜索
-                  </button>
-              </form>
+            <form class="searchForm">
+              <input
+                type="text"
+                id="autocomplete"
+                class="input-error input-xxlarge"
+                v-model="kw"
+                @keyup.enter="goSearch"
+              />
+              <button
+                class="sui-btn btn-xlarge btn-danger"
+                type="button"
+                @click="goSearch"
+              >
+                搜索
+              </button>
+            </form>
           </div>
       </div>
   </header>
@@ -49,7 +55,24 @@
 
 <script>
 export default {
-  name: 'AppHeader'
+  name: 'AppHeader',
+  data () {
+    return {
+      kw: ''
+    }
+  },
+  methods: {
+    goSearch () {
+      // 使用编程式导航时： 重复跳转同一路由 会产生报错
+      // 报错原因： push在跳转后会返回2个回调函数  成功则触发then函数 失败触发catch函数
+      //           使用时并没有捕获catch错误 那么就会将错误输出
+      // this.$router.push('/search', () => {})
+      // this.$router.push('/search')
+      // 跳转到搜索页面 并将关键字 通过动态路由传入
+      // 匹配结果为空时需要传递 undefined
+      this.$router.push({ name: 'search', params: { kw: this.kw || undefined } })
+    }
+  }
 }
 </script>
 
