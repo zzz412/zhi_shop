@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <h1>欢迎访问 智商城！！！</h1>
+    <router-view></router-view>
   </div>
 </template>
 
