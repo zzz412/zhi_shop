@@ -14,29 +14,31 @@
               <a href="###">秒杀</a>
           </nav>
           <div class="sort">
-              <div class="all-sort-list2">
-                  <div class="item" v-for="cate1 in navList" :key="cate1.categoryId">
+              <!-- 鼠标移出时 清除activeId -->
+              <div class="all-sort-list2" @mouseleave="activeId = null">
+                  <!-- 鼠标移入 给移入元素添加 active类名 -->
+                  <div
+                    class="item"
+                    :class="{ active: activeId === cate1.categoryId}"
+                    v-for="cate1 in navList"
+                    :key="cate1.categoryId"
+                    @mouseenter="addActive(cate1.categoryId)"
+                  >
                       <h3>
+                          <!-- 一级分类 -->
                           <a href="">{{cate1.categoryName}}</a>
                       </h3>
                       <div class="item-list clearfix">
                           <div class="subitem">
-                              <dl class="fore" v-for="j in 10" :key="j">
+                              <dl class="fore" v-for="cate2 in cate1.categoryChild" :key="cate2.categoryId">
                                   <dt>
-                                      <a href="">电子书{{j}}</a>
+                                      <!-- 二级分类 -->
+                                      <a href="">{{cate2.categoryName}}</a>
                                   </dt>
                                   <dd>
-                                      <em>
-                                          <a href="">婚恋/两性</a>
-                                      </em>
-                                      <em>
-                                          <a href="">文学</a>
-                                      </em>
-                                      <em>
-                                          <a href="">经管</a>
-                                      </em>
-                                      <em>
-                                          <a href="">畅读VIP</a>
+                                      <em v-for="cate3 in cate2.categoryChild" :key="cate3.categoryId">
+                                          <!-- 三级分类 -->
+                                          <a href="">{{cate3.categoryName}}</a>
                                       </em>
                                   </dd>
                               </dl>
@@ -50,18 +52,27 @@
 </template>
 
 <script>
+// 导入API接口函数
+import { getCategoryList } from '@/api'
+
 export default {
   name: 'TypeNav',
   data () {
     return {
-      navList: [] // 导航列表
+      navList: [], // 导航列表
+      activeId: null // 当前移入item的ID
     }
   },
-  mounted () {
-    // 发起请求  获取导航分类
-    this.$http.get('http://39.98.123.211/api/product/getBaseCategoryList').then(res => {
-      this.navList = res.data.data
-    })
+  methods: {
+    addActive (id) {
+      // 移入时将当前item的id保存
+      this.activeId = id
+    }
+  },
+  async mounted () {
+    // 调用获取导航分类接口
+    const res = await getCategoryList()
+    this.navList = res.data.data
   }
 }
 </script>
@@ -109,6 +120,12 @@ export default {
 
           .all-sort-list2 {
               .item {
+                  // &:hover {
+                  //   background: red;
+                  // }
+                  &.active {
+                    background: #d9d9d9;
+                  }
                   h3 {
                       line-height: 30px;
                       font-size: 14px;
