@@ -54,6 +54,8 @@
 <script>
 // 导入API接口函数
 import { getCategoryList } from '@/api'
+// 按需导入lodash中的节流函数
+import { throttle } from 'lodash/function'
 
 export default {
   name: 'TypeNav',
@@ -64,10 +66,12 @@ export default {
     }
   },
   methods: {
-    addActive (id) {
+    // 节流操作： 一定时间内只能触发一次
+    // 防抖操作： 一定时间内多次触发 只会使用最后一次
+    addActive: throttle(function (id) {
       // 移入时将当前item的id保存
       this.activeId = id
-    }
+    }, 30)
   },
   async mounted () {
     // 调用获取导航分类接口

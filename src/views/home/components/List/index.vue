@@ -2,8 +2,16 @@
   <!--列表-->
   <div class="list-container">
       <div class="sortList clearfix">
+          <!-- 轮播图位置 -->
           <div class="center">
-            <img src="@/assets/images/home/banner1.jpg" />
+            <div class="swiper-container">
+              <div class="swiper-wrapper">
+                <div class="swiper-slide"><img src="@/assets/images/home/banner1.jpg" /></div>
+                <div class="swiper-slide"><img src="@/assets/images/home/banner2.jpg" /></div>
+                <div class="swiper-slide"><img src="@/assets/images/home/banner3.jpg" /></div>
+                <div class="swiper-slide"><img src="@/assets/images/home/banner4.jpg" /></div>
+              </div>
+            </div>
           </div>
           <div class="right">
               <div class="news">
@@ -89,8 +97,18 @@
 </template>
 
 <script>
+import Swiper from 'swiper'
+import 'swiper/css/swiper.css'
+
 export default {
-  name: 'List'
+  name: 'List',
+  mounted () {
+    // eslint-disable-next-line no-new
+    new Swiper('.swiper-container', {
+      loop: true,
+      autoplay: true
+    })
+  }
 }
 </script>
 
