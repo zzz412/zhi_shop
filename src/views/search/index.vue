@@ -2,6 +2,7 @@
   <div class="search-view">
     <!-- 通过$route.params -->
     <h1>搜索页面 {{$route.params}}</h1>
+    <h2>搜索页面 {{$route.query}}</h2>
   </div>
 </template>
 

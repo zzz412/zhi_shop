@@ -23,22 +23,23 @@
                     v-for="cate1 in navList"
                     :key="cate1.categoryId"
                     @mouseenter="addActive(cate1.categoryId)"
+                    @click="goSearch"
                   >
                       <h3>
                           <!-- 一级分类 -->
-                          <a href="">{{cate1.categoryName}}</a>
+                          <a :data-category-name="cate1.categoryName" :data-category1-id="cate1.categoryId">{{cate1.categoryName}}</a>
                       </h3>
                       <div class="item-list clearfix">
                           <div class="subitem">
                               <dl class="fore" v-for="cate2 in cate1.categoryChild" :key="cate2.categoryId">
                                   <dt>
                                       <!-- 二级分类 -->
-                                      <a href="">{{cate2.categoryName}}</a>
+                                      <a :data-category-name="cate2.categoryName" :data-category2-id="cate2.categoryId">{{cate2.categoryName}}</a>
                                   </dt>
                                   <dd>
                                       <em v-for="cate3 in cate2.categoryChild" :key="cate3.categoryId">
                                           <!-- 三级分类 -->
-                                          <a href="">{{cate3.categoryName}}</a>
+                                          <a :data-category-name="cate3.categoryName" :data-category3-id="cate3.categoryId">{{cate3.categoryName}}</a>
                                       </em>
                                   </dd>
                               </dl>
@@ -71,7 +72,18 @@ export default {
     addActive: throttle(function (id) {
       // 移入时将当前item的id保存
       this.activeId = id
-    }, 30)
+    }, 30),
+    // 跳转搜索页面
+    goSearch (e) {
+      // 识别当前点击的元素为 1级、2级、3级  category1Id  category2Id
+      // 通过给1级、2级、3级分类添加属性 来区别当前元素是否为1级、2级、3级
+      // 使用JS获取元素中的data-属性
+      const { categoryName, category1Id, category2Id, category3Id } = e.target.dataset
+      // 如果没有categoryName值 说明不能1级、2级、3级分类
+      if (!categoryName) return
+      // undefined值不会通过URL传递
+      this.$router.push({ path: '/search/', query: { categoryName, category1Id, category2Id, category3Id } })
+    }
   },
   async mounted () {
     // 调用获取导航分类接口
@@ -141,6 +153,9 @@ export default {
                       a {
                           color: #333;
                       }
+                  }
+                  a {
+                    cursor: pointer;
                   }
 
                   .item-list {
