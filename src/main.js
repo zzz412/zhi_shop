@@ -7,6 +7,7 @@ import store from './store'
 import '@/mock'
 
 import TypeNav from '@/components/TypeNav'
+import Slide from '@/components/Slide'
 
 // 初始化CSS
 import 'normalize.css'
@@ -17,6 +18,7 @@ Vue.config.productionTip = false
 
 // 全局注册导航分类组件
 Vue.component('TypeNav', TypeNav)
+Vue.component('Slide', Slide)
 
 new Vue({
   router,
