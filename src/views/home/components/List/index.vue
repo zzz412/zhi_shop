@@ -4,13 +4,26 @@
       <div class="sortList clearfix">
           <!-- 轮播图位置 -->
           <div class="center">
-            <div class="swiper-container">
+            <!-- 轮播图容器 -->
+            <div
+              class="swiper-container"
+              ref="mySwiper"
+              @mouseenter="swiperData.autoplay.stop()"
+              @mouseleave="swiperData.autoplay.start()"
+            >
+              <!-- 轮播项容器 -->
               <div class="swiper-wrapper">
-                <div class="swiper-slide"><img src="@/assets/images/home/banner1.jpg" /></div>
-                <div class="swiper-slide"><img src="@/assets/images/home/banner2.jpg" /></div>
-                <div class="swiper-slide"><img src="@/assets/images/home/banner3.jpg" /></div>
-                <div class="swiper-slide"><img src="@/assets/images/home/banner4.jpg" /></div>
+                <!-- 轮播项 -->
+                <div
+                  class="swiper-slide"
+                  v-for="banner in bannerList"
+                  :key="banner.id"
+                >
+                  <img style="width: 100%; height: 100%;" :src="banner.imgUrl" />
+                </div>
               </div>
+              <!-- 轮播分页器 -->
+              <div class="swiper-pagination"></div>
             </div>
           </div>
           <div class="right">
@@ -99,20 +112,51 @@
 <script>
 import Swiper from 'swiper'
 import 'swiper/css/swiper.css'
+import { getBanner } from '@/api'
 
 export default {
   name: 'List',
-  mounted () {
-    // eslint-disable-next-line no-new
-    new Swiper('.swiper-container', {
-      loop: true,
-      autoplay: true
+  data () {
+    return {
+      swiperData: null, // swiper对象
+      bannerList: []
+    }
+  },
+  async mounted () {
+    // 获取轮播图列表
+    const res = await getBanner()
+    // 保存轮播列表
+    this.bannerList = res.data.data
+    // 初始化轮播图时  轮播图列表数据还没有渲染 ->  this.$nextTick等待页面渲染完成后
+    this.$nextTick(() => {
+      // eslint-disable-next-line no-new
+      this.swiperData = new Swiper(this.$refs.mySwiper, {
+        // 设置无缝衔接
+        loop: true,
+        // 设置自动播放
+        autoplay: {
+          // 播放间隔
+          delay: 3000,
+          // 关闭用户操作后 停止轮播
+          disableOnInteraction: false
+        },
+        // 设置轮播效果
+        effect: 'fade',
+        // 设置分页器
+        pagination: {
+          // 分页器容器
+          el: '.swiper-pagination',
+          // 分页器可点击切换
+          clickable: true
+        }
+      })
     })
   }
 }
 </script>
 
 <style lang="scss" scoped>
+
 .list-container {
   width: 1200px;
   margin: 0 auto;
@@ -282,6 +326,10 @@ export default {
               }
           }
       }
+  }
+  .swiper-container {
+    width: 100%;
+    height: 100%;
   }
 }
 </style>

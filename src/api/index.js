@@ -15,3 +15,8 @@ export const getCategoryList = () => {
 export const getBanner = (data) => {
   return mockRequest({ method: 'get', url: '/banner', data })
 }
+
+// 获取 首页楼层数据
+export const getFloor = () => {
+  return mockRequest({ method: 'get', url: '/floor' })
+}
