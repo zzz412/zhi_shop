@@ -5,7 +5,12 @@
 </template>
 
 <script>
-export default {}
+export default {
+  mounted () {
+    // 调用actions获取导航分类
+    this.$store.dispatch('home/getNavList')
+  }
+}
 </script>
 
 <style lang="scss"></style>
