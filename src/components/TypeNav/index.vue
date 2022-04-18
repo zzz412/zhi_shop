@@ -92,7 +92,7 @@ export default {
       // 如果没有categoryName值 说明不能1级、2级、3级分类
       if (!categoryName) return
       // undefined值不会通过URL传递
-      this.$router.push({ path: '/search/', query: { categoryName, category1Id, category2Id, category3Id } })
+      this.$router.push({ name: 'search', query: { categoryName, category1Id, category2Id, category3Id }, params: this.$route.params })
     },
     // 隐藏导航
     hideSort () {

@@ -28,6 +28,10 @@ export default {
   },
   getters: {
     // 商品列表
-    goodsList: state => state.searchInfo.goodsList
+    goodsList: state => state.searchInfo.goodsList,
+    // 品牌列表
+    trademarkList: state => state.searchInfo.trademarkList,
+    // 属性列表
+    attrsList: state => state.searchInfo.attrsList
   }
 }

@@ -49,7 +49,7 @@
                                     </strong>
                                 </div>
                                 <div class="attr">
-                                    <a :title="goods.title">{{goods.title}}</a>
+                                    <a :title="goods.title" v-html="goods.title"></a>
                                 </div>
                                 <div class="commit">
                                     <i class="command">已有<span>{{goods.id}}</span>人评价</i>
@@ -79,11 +79,32 @@ import { mapGetters } from 'vuex'
 export default {
   name: 'SearchView',
   components: { Bread, Pagination, Selector },
+  data () {
+    return {
+      // 搜索参数
+      searchQuery: {}
+    }
+  },
   computed: {
     ...mapGetters('search', ['goodsList'])
   },
-  mounted () {
-    this.$store.dispatch('search/getSearchInfo', {})
+  watch: {
+    // 监听 $route的改变 （监听路由的改变）
+    $route: {
+      handler () {
+        // 1 设置搜索参数 将查询字符串对象与路由对象合并到搜索参数中
+        Object.assign(this.searchQuery, this.$route.query, this.$route.params)
+        // 2. 调用函数获取查询结果
+        this.getSearch()
+      },
+      immediate: true
+    }
+  },
+  methods: {
+    // 获取搜索结果
+    getSearch () {
+      this.$store.dispatch('search/getSearchInfo', this.searchQuery)
+    }
   }
 }
 </script>

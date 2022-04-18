@@ -15,7 +15,7 @@ const routes = [
       // 主页
       { path: '/home', component: () => import('@/views/home') },
       // 搜索页  /search/:kw? 【? 0 -> 1个】
-      { path: '/search/:kw?', component: () => import('@/views/search'), name: 'search' }
+      { path: '/search/:keyword?', component: () => import('@/views/search'), name: 'search' }
     ]
   }
 ]

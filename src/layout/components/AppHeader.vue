@@ -70,7 +70,7 @@ export default {
       // this.$router.push('/search')
       // 跳转到搜索页面 并将关键字 通过动态路由传入
       // 匹配结果为空时需要传递 undefined
-      this.$router.push({ name: 'search', params: { kw: this.kw || undefined } })
+      this.$router.push({ name: 'search', params: { keyword: this.kw || undefined }, query: this.$route.query })
     }
   }
 }
