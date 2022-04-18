@@ -20,3 +20,8 @@ export const getBanner = (data) => {
 export const getFloor = () => {
   return mockRequest({ method: 'get', url: '/floor' })
 }
+
+// 获取 商品搜索结果
+export const getSearchGoods = (data) => {
+  return request({ method: 'post', url: '/api/list', data })
+}

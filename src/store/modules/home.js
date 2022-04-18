@@ -18,7 +18,7 @@ export default {
     // 获取导航分类
     async getNavList ({ commit }) {
       const res = await getCategoryList()
-      commit('SET_NAV_LIST', res.data.data)
+      commit('SET_NAV_LIST', res)
     }
   }
 }
