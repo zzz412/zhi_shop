@@ -6,7 +6,11 @@
           <div class="fl key brand">品牌</div>
           <div class="value logos">
               <ul class="logo-list">
-                  <li v-for="trademark in trademarkList" :key="trademark.tmId">
+                  <li
+                    v-for="trademark in trademarkList"
+                    :key="trademark.tmId"
+                    @click="$emit('changeTrademark', trademark)"
+                  >
                     {{trademark.tmName}}
                   </li>
               </ul>
@@ -18,7 +22,7 @@
           <div class="fl value">
               <ul class="type-list">
                   <li v-for="value in attrs.attrValueList" :key="value">
-                      <a>{{value}}</a>
+                      <a @click="$emit('changeAttrs', { id: attrs.attrId, value, name: attrs.attrName})">{{value}}</a>
                   </li>
               </ul>
           </div>

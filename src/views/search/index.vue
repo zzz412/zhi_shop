@@ -6,9 +6,9 @@
     <div class="main">
         <div class="py-container">
             <!-- 面包屑 -->
-            <Bread />
+            <Bread :searchQuery="searchQuery" />
             <!-- 筛选 选择 -->
-            <Selector />
+            <Selector @changeTrademark="changeTrademark" @changeAttrs="changeAttrs"/>
             <!--商品列表-->
             <div class="details clearfix">
                 <div class="sui-navbar">
@@ -82,7 +82,10 @@ export default {
   data () {
     return {
       // 搜索参数
-      searchQuery: {}
+      searchQuery: {
+        props: [], // 属性
+        trademark: undefined // 品牌
+      }
     }
   },
   computed: {
@@ -93,7 +96,7 @@ export default {
     $route: {
       handler () {
         // 1 设置搜索参数 将查询字符串对象与路由对象合并到搜索参数中
-        Object.assign(this.searchQuery, this.$route.query, this.$route.params)
+        this.searchQuery = { ...this.searchQuery, ...this.$route.query, ...this.$route.params }
         // 2. 调用函数获取查询结果
         this.getSearch()
       },
@@ -104,6 +107,24 @@ export default {
     // 获取搜索结果
     getSearch () {
       this.$store.dispatch('search/getSearchInfo', this.searchQuery)
+    },
+    // 品牌更改
+    changeTrademark (trademark) {
+      // 1. 设置品牌搜索参数   品牌ID:品牌名
+      this.searchQuery.trademark = `${trademark.tmId}:${trademark.tmName}`
+      // 2. 调用函数搜索结果
+      this.getSearch()
+    },
+    // 属性更改
+    changeAttrs ({ id, value, name }) {
+      // 1. 将属性值组成 需要的格式  id:value:name
+      const attrs = `${id}:${value}:${name}`
+      // 1.1 判断属性值 是否已经存在
+      if (this.searchQuery.props.includes(attrs)) return
+      // 2. 将改好的属性值 添加到属性组中
+      this.searchQuery.props.push(attrs)
+      // 3. 调用函数 获取搜索结果
+      this.getSearch()
     }
   }
 }
@@ -171,10 +192,13 @@ export default {
                               width: 215px;
                               height: 255px;
                               a{
+                                  display: block;
+                                  max-width: 100%;
+                                  height: 100%;
                                   color: #666;
                                   img{
                                       max-width: 100%;
-                                      height: auto;
+                                      height: 100%;
                                       vertical-align: middle;
                                   }
                               }
