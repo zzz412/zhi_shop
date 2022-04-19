@@ -6,7 +6,13 @@
     <div class="main">
         <div class="py-container">
             <!-- 面包屑 -->
-            <Bread :searchQuery="searchQuery" />
+            <Bread
+              :searchQuery="searchQuery"
+              @delCategoryName="delCategoryName"
+              @delKeyword="delKeyword"
+              @delTrademark="delTrademark"
+              @delProps="delProps"
+            />
             <!-- 筛选 选择 -->
             <Selector @changeTrademark="changeTrademark" @changeAttrs="changeAttrs"/>
             <!--商品列表-->
@@ -14,23 +20,11 @@
                 <div class="sui-navbar">
                     <div class="navbar-inner filter">
                         <ul class="sui-nav">
-                            <li class="active">
-                                <a href="#">综合</a>
+                            <li class="active" @click="changeSort(1)">
+                                <a href="javascript:">综合⬆</a>
                             </li>
-                            <li>
-                                <a href="#">销量</a>
-                            </li>
-                            <li>
-                                <a href="#">新品</a>
-                            </li>
-                            <li>
-                                <a href="#">评价</a>
-                            </li>
-                            <li>
-                                <a href="#">价格⬆</a>
-                            </li>
-                            <li>
-                                <a href="#">价格⬇</a>
+                            <li @click="changeSort(2)">
+                                <a href="javascript:">价格⬇</a>
                             </li>
                         </ul>
                     </div>
@@ -84,7 +78,8 @@ export default {
       // 搜索参数
       searchQuery: {
         props: [], // 属性
-        trademark: undefined // 品牌
+        trademark: undefined, // 品牌
+        order: '1:desc' // 排序
       }
     }
   },
@@ -124,6 +119,46 @@ export default {
       // 2. 将改好的属性值 添加到属性组中
       this.searchQuery.props.push(attrs)
       // 3. 调用函数 获取搜索结果
+      this.getSearch()
+    },
+    // 排序更改
+    changeSort (sort) {
+      // 1. 设置排序规则
+      this.searchQuery.order = `${sort}:desc`
+      // 2. 调用函数 获取搜索结果
+      this.getSearch()
+    },
+    // 移除分类面包屑
+    delCategoryName () {
+      // 1. 设置分类名为空
+      this.searchQuery.categoryName = undefined
+      this.searchQuery.category1Id = undefined
+      this.searchQuery.category2Id = undefined
+      this.searchQuery.category3Id = undefined
+      // 通过跳转路由的形式 去更改传递的查询字符串
+      this.$router.push({ name: 'search', params: this.$route.params })
+    },
+    // 移除关键词
+    delKeyword () {
+      // 1. 设置关键词为空
+      this.searchQuery.keyword = undefined
+      // 2. 发布 清除关键词的事件
+      this.$bus.$emit('clearKw')
+      // 3. 跳转路由 清除路由中的关键词
+      this.$router.push({ name: 'search', query: this.$route.query })
+    },
+    // 移除品牌
+    delTrademark  () {
+      // 1. 设置品牌名为空
+      this.searchQuery.trademark = undefined
+      // 2. 调用函数 获取搜索结果
+      this.getSearch()
+    },
+    // 移除属性
+    delProps (i) {
+      // 1. 根据索引移除 对应数组对应属性
+      this.searchQuery.props.splice(i, 1)
+      // 2. 调用函数 获取搜索结果
       this.getSearch()
     }
   }

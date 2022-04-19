@@ -20,6 +20,9 @@ Vue.config.productionTip = false
 Vue.component('TypeNav', TypeNav)
 Vue.component('Slide', Slide)
 
+// 全局注册事件处理中心
+Vue.prototype.$bus = new Vue()
+
 new Vue({
   router,
   store,

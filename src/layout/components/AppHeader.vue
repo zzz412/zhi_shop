@@ -72,6 +72,16 @@ export default {
       // 匹配结果为空时需要传递 undefined
       this.$router.push({ name: 'search', params: { keyword: this.kw || undefined }, query: this.$route.query })
     }
+  },
+  mounted () {
+    // 订阅 清除关键词事件
+    this.$bus.$on('clearKw', () => {
+      this.kw = ''
+    })
+  },
+  beforeDestroy () {
+    // 取消订阅 清除关键词事件
+    this.$bus.$off('clearKw')
   }
 }
 </script>
