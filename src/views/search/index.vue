@@ -57,7 +57,7 @@
                     </ul>
                 </div>
                 <!-- 分页器 -->
-                <Pagination />
+                <Pagination :total="total" :pageSize="10" :page="searchQuery.pageNo" @pageChange="pageChange" />
             </div>
         </div>
     </div>
@@ -86,7 +86,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('search', ['goodsList']),
+    ...mapGetters('search', ['goodsList', 'total']),
     // 是否为综合排序
     isOne () {
       return this.searchQuery.order.includes('1')
@@ -101,7 +101,7 @@ export default {
     $route: {
       handler () {
         // 1 设置搜索参数 将查询字符串对象与路由对象合并到搜索参数中
-        this.searchQuery = { ...this.searchQuery, ...this.$route.query, ...this.$route.params }
+        this.searchQuery = { ...this.searchQuery, ...this.$route.query, ...this.$route.params, pageNo: 1 }
         // 2. 调用函数获取查询结果
         this.getSearch()
       },
@@ -117,6 +117,7 @@ export default {
     changeTrademark (trademark) {
       // 1. 设置品牌搜索参数   品牌ID:品牌名
       this.searchQuery.trademark = `${trademark.tmId}:${trademark.tmName}`
+      this.searchQuery.pageNo = 1
       // 2. 调用函数搜索结果
       this.getSearch()
     },
@@ -128,6 +129,7 @@ export default {
       if (this.searchQuery.props.includes(attrs)) return
       // 2. 将改好的属性值 添加到属性组中
       this.searchQuery.props.push(attrs)
+      this.searchQuery.pageNo = 1
       // 3. 调用函数 获取搜索结果
       this.getSearch()
     },
@@ -140,6 +142,13 @@ export default {
         sort2 = this.searchQuery.order.includes('desc') ? 'asc' : 'desc'
       }
       this.searchQuery.order = `${sort}:${sort2}`
+      // 2. 调用函数 获取搜索结果
+      this.getSearch()
+    },
+    // 页码改变
+    pageChange (i) {
+      // 1. 改变参数页码
+      this.searchQuery.pageNo = i
       // 2. 调用函数 获取搜索结果
       this.getSearch()
     },

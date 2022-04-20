@@ -32,6 +32,8 @@ export default {
     // 品牌列表
     trademarkList: state => state.searchInfo.trademarkList,
     // 属性列表
-    attrsList: state => state.searchInfo.attrsList
+    attrsList: state => state.searchInfo.attrsList,
+    // 总数量
+    total: state => state.searchInfo.total
   }
 }
