@@ -20,11 +20,11 @@
                 <div class="sui-navbar">
                     <div class="navbar-inner filter">
                         <ul class="sui-nav">
-                            <li class="active" @click="changeSort(1)">
-                                <a href="javascript:">综合⬆</a>
+                            <li :class="{ active: isOne }" @click="changeSort(1)">
+                                <a href="javascript:">综合 <span v-show="isOne">{{isDesc}}</span></a>
                             </li>
-                            <li @click="changeSort(2)">
-                                <a href="javascript:">价格⬇</a>
+                            <li :class="{ active: !isOne }" @click="changeSort(2)">
+                                <a href="javascript:">价格 <span v-show="!isOne">{{isDesc}}</span></a>
                             </li>
                         </ul>
                     </div>
@@ -79,12 +79,22 @@ export default {
       searchQuery: {
         props: [], // 属性
         trademark: undefined, // 品牌
-        order: '1:desc' // 排序
+        order: '1:desc', // 排序
+        pageNo: 1,
+        pageSize: 10
       }
     }
   },
   computed: {
-    ...mapGetters('search', ['goodsList'])
+    ...mapGetters('search', ['goodsList']),
+    // 是否为综合排序
+    isOne () {
+      return this.searchQuery.order.includes('1')
+    },
+    // 是否为降序
+    isDesc () {
+      return this.searchQuery.order.includes('desc') ? '⬇' : '⬆'
+    }
   },
   watch: {
     // 监听 $route的改变 （监听路由的改变）
@@ -123,8 +133,13 @@ export default {
     },
     // 排序更改
     changeSort (sort) {
+      let sort2 = 'desc'
       // 1. 设置排序规则
-      this.searchQuery.order = `${sort}:desc`
+      // 1.1  如何知道是否要更改  降序或升序（当前排序规则一致时）
+      if (this.searchQuery.order.includes(sort)) {
+        sort2 = this.searchQuery.order.includes('desc') ? 'asc' : 'desc'
+      }
+      this.searchQuery.order = `${sort}:${sort2}`
       // 2. 调用函数 获取搜索结果
       this.getSearch()
     },
@@ -200,11 +215,14 @@ export default {
                               padding: 11px 15px;
                               color: #777;
                               text-decoration: none;
+                            &:hover {
+                              color: #777 !important;
+                            }
                           }
                           &.active{
                               a{
                                   background: #e1251b;
-                                  color: #fff;
+                                  color: #fff !important;
                               }
                           }
                       }

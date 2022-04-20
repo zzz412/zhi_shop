@@ -7,7 +7,22 @@
           </li>
       </ul>
       <ul class="fl sui-tag">
-        {{searchQuery}}
+        <!-- 分类 面包屑 -->
+        <li class="with-x" v-if="searchQuery.categoryName">
+          {{searchQuery.categoryName}}<i @click="$emit('delCategoryName')">×</i>
+        </li>
+        <!-- 关键词 面包屑 -->
+        <li class="with-x" v-if="searchQuery.keyword">
+          {{searchQuery.keyword}}<i @click="$emit('delKeyword')">×</i>
+        </li>
+        <!-- 品牌 面包屑 -->
+        <li class="with-x" v-if="searchQuery.trademark">
+          {{searchQuery.trademark.split(':')[1]}}<i @click="$emit('delTrademark')">×</i>
+        </li>
+        <!-- 品牌 面包屑 -->
+        <li class="with-x" v-for="attrs in searchQuery.props" :key="attrs">
+          {{attrs.split(':')[1]}}<i @click="$emit('delProps')">×</i>
+        </li>
       </ul>
   </div>
 </template>
