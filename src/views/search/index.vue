@@ -34,16 +34,18 @@
                         <li class="yui3-u-1-5" v-for="goods in goodsList" :key="goods.id">
                             <div class="list-wrap">
                                 <div class="p-img">
-                                    <a><img :src="goods.defaultImg" /></a>
+                                    <router-link :to="{ name: 'detail', params: { skuId: goods.id }}">
+                                      <img :src="goods.defaultImg" />
+                                    </router-link>
                                 </div>
                                 <div class="price">
-                                    <strong>
+                                    <router-link tag="strong" :to="{ name: 'detail', params: { skuId: goods.id }}">
                                         <em>¥</em>
                                         <i> {{goods.price.toFixed(2)}}</i>
-                                    </strong>
+                                    </router-link>
                                 </div>
                                 <div class="attr">
-                                    <a :title="goods.title" v-html="goods.title"></a>
+                                    <router-link :to="{ name: 'detail', params: { skuId: goods.id }}" :title="goods.title" v-html="goods.title"></router-link>
                                 </div>
                                 <div class="commit">
                                     <i class="command">已有<span>{{goods.id}}</span>人评价</i>

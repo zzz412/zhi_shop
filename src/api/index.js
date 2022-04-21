@@ -25,3 +25,6 @@ export const getFloor = () => {
 export const getSearchGoods = (data) => {
   return request({ method: 'post', url: '/api/list', data })
 }
+
+// 获取 商品详情
+export const getGoodsDetail = (skuId) => request({ method: 'get', url: '/api/item/' + skuId })

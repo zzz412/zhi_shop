@@ -1,27 +1,19 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+// 导入路由表
+import routes from './routes'
 
-// 导入布局组件
-import Layout from '@/layout'
 Vue.use(VueRouter)
 
-const routes = [
-  {
-    path: '/',
-    component: Layout,
-    // 路由重定向到主页
-    redirect: '/home',
-    children: [
-      // 主页
-      { path: '/home', component: () => import('@/views/home') },
-      // 搜索页  /search/:kw? 【? 0 -> 1个】
-      { path: '/search/:keyword?', component: () => import('@/views/search'), name: 'search' }
-    ]
-  }
-]
-
 const router = new VueRouter({
-  routes
+  routes,
+  // 滚动行为： 设置页面滚动条位置
+  // behavior: 'smooth' 设置滚动动画
+  scrollBehavior: (to, from, savedPosition) => {
+    // 如果是回退行为 则不回到顶部
+    if (savedPosition) return savedPosition
+    return { x: 0, y: 0, behavior: 'smooth' }
+  }
 })
 
 // 自己编写跳转路由方法
