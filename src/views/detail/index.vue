@@ -7,10 +7,7 @@
       <!-- 导航路径区域 -->
       <div class="conPoin">
         <div class="conPoin">
-          <a href="###">手机、数码、通讯</a>
-          <a href="###">手机</a>
-          <a href="###">Apple苹果</a>
-          <a>iphone 6S系类</a>
+          <a v-for="item, i  in cateNav" :key="i">{{item}}</a>
         </div>
       </div>
       <!-- 主要内容区域 -->
@@ -24,10 +21,10 @@
         <div class="InfoWrap">
           <div class="goodsDetail">
             <h3 class="InfoName">
-              Apple iPhone 6s（A1700）64G玫瑰金色 移动通信电信4G手机
+              {{skuInfo.skuName}}
             </h3>
             <p class="news">
-              推荐选择下方[移动优惠购],手机套餐齐搞定,不用换号,每月还有花费返
+              {{skuInfo.skuDesc}}
             </p>
             <div class="priceArea">
               <div class="priceArea1">
@@ -36,12 +33,12 @@
                 </div>
                 <div class="price">
                   <i>¥</i>
-                  <em>5299</em>
+                  <em>{{skuInfo.price}}</em>
                   <span>降价通知</span>
                 </div>
                 <div class="remark">
                   <i>累计评价</i>
-                  <em>65545</em>
+                  <em>{{skuInfo.tmId}}</em>
                 </div>
               </div>
               <div class="priceArea2">
@@ -75,29 +72,16 @@
           <div class="choose">
             <div class="chooseArea">
               <div class="choosed"></div>
-              <dl>
-                <dt class="title">选择颜色</dt>
-                <dd changepirce="0">金色</dd>
-                <dd changepirce="40">银色</dd>
-                <dd changepirce="90">黑色</dd>
-              </dl>
-              <dl>
-                <dt class="title">内存容量</dt>
-                <dd changepirce="0">16G</dd>
-                <dd changepirce="300">64G</dd>
-                <dd changepirce="900">128G</dd>
-                <dd changepirce="1300">256G</dd>
-              </dl>
-              <dl>
-                <dt class="title">选择版本</dt>
-                <dd changepirce="0">公开版</dd>
-                <dd changepirce="-1000">移动版</dd>
-              </dl>
-              <dl>
-                <dt class="title">购买方式</dt>
-                <dd changepirce="0">官方标配</dd>
-                <dd changepirce="-240">优惠移动版</dd>
-                <dd changepirce="-390">电信优惠版</dd>
+              <dl v-for="spu in spuList" :key="spu.id">
+                <dt class="title">{{spu.saleAttrName}}</dt>
+                <dd
+                  v-for="value in spu.spuSaleAttrValueList"
+                  :class="{ active: value.isChecked === '1' }"
+                  :key="value.id"
+                  @click="changeSpuValue(value, spu)"
+                >
+                  {{value.saleAttrValueName}}
+                </dd>
               </dl>
             </div>
 
@@ -124,14 +108,30 @@
 import ProductDetail from './components/ProductDetail'
 import Zoom from './components/Zoom'
 import ImageList from './components/ImageList'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'Detail',
   components: { ProductDetail, Zoom, ImageList },
   props: ['skuId'],
+  computed: {
+    ...mapGetters('detail', ['cateNav', 'skuInfo', 'spuList'])
+  },
   mounted () {
     // 获取商品详细信息
-    this.$store.dispatch('detail/getGoodsInfo', this.skuId)
+    this.$store.dispatch('detail/getGoodsInfo', this.skuId).catch(() => {
+      // 处理错误信息
+      this.$router.back()
+    })
+  },
+  methods: {
+    // 更改选中规格
+    changeSpuValue (attrValue, spu) {
+      // 其他规格值 isChecked 为0
+      spu.spuSaleAttrValueList.forEach(value => { value.isChecked = '0' })
+      // 设置被点击的规格值 isChecked为1
+      attrValue.isChecked = '1'
+    }
   }
 }
 </script>
@@ -277,7 +277,8 @@ export default {
               border-right: 1px solid #bbb;
               border-bottom: 1px solid #bbb;
               border-left: 1px solid #eee;
-              &:nth-of-type(1) {
+              &.active {
+                border: 1px solid red;
                 color: red;
               }
             }

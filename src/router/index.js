@@ -12,7 +12,7 @@ const router = new VueRouter({
   scrollBehavior: (to, from, savedPosition) => {
     // 如果是回退行为 则不回到顶部
     if (savedPosition) return savedPosition
-    return { x: 0, y: 0, behavior: 'smooth' }
+    return { x: 0, y: 0, behavior: 'auto' }
   }
 })
 
