@@ -42,7 +42,7 @@ export default {
       // 图片总数量
       const img_length = this.skuInfo.skuImageList.length
       // 移动到最后一张时 取消增加
-      if (img_length - 5 === this.moveIndex) return
+      if (img_length - 5 === this.moveIndex || img_length <= 5) return
       // 增加移动索引
       this.moveIndex++
     },

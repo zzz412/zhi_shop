@@ -1,12 +1,21 @@
 // 封装请求库
 import Axios from 'axios'
 
+import { getV4 } from '@/utils/auth'
+
 // 通过create创建axios实例
 const request = Axios.create({
   // 配置公共请求地址
   baseURL: 'http://39.98.123.211',
   // 请求超时时间
   timeout: 5000
+})
+
+// 定义请求拦截器
+request.interceptors.request.use(config => {
+  // 给每个请求携带 userTempId  通过uuid的v4加密 生成ID
+  config.headers.userTempId = getV4()
+  return config
 })
 
 // 定义响应拦截器

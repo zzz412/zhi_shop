@@ -28,3 +28,9 @@ export const getSearchGoods = (data) => {
 
 // 获取 商品详情
 export const getGoodsDetail = (skuId) => request({ method: 'get', url: '/api/item/' + skuId })
+
+// 添加到购物车 或 修改购物车
+export const reqAddCart = (skuId, skuNum) => request({ method: 'post', url: `/api/cart/addToCart/${skuId}/${skuNum}` })
+
+// 获取购物车列表
+export const reqGetCart = () => request({ method: 'get', url: '/api/cart/cartList' })

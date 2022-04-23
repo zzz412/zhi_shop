@@ -87,12 +87,17 @@
 
             <div class="cartWrap">
               <div class="controls">
-                <input autocomplete="off" value="1" class="itxt" />
-                <a href="###" class="plus">+</a>
-                <a href="###" class="mins">-</a>
+                <input
+                  autocomplete="off"
+                  class="itxt"
+                  :value="skuNum"
+                  @change="changeSkuNum"
+                />
+                <a href="javascript:" class="plus" @click="skuNum ++">+</a>
+                <a href="javascript:" class="mins" @click="skuNum = skuNum > 1 ? skuNum - 1 : 1">-</a>
               </div>
               <div class="add">
-                <a href="###" target="_blank">加入购物车</a>
+                <a href="javascript:" @click="addCart">加入购物车</a>
               </div>
             </div>
           </div>
@@ -109,11 +114,17 @@ import ProductDetail from './components/ProductDetail'
 import Zoom from './components/Zoom'
 import ImageList from './components/ImageList'
 import { mapGetters } from 'vuex'
+import { reqAddCart, reqGetCart } from '@/api'
 
 export default {
   name: 'Detail',
   components: { ProductDetail, Zoom, ImageList },
   props: ['skuId'],
+  data () {
+    return {
+      skuNum: 1
+    }
+  },
   computed: {
     ...mapGetters('detail', ['cateNav', 'skuInfo', 'spuList'])
   },
@@ -131,6 +142,25 @@ export default {
       spu.spuSaleAttrValueList.forEach(value => { value.isChecked = '0' })
       // 设置被点击的规格值 isChecked为1
       attrValue.isChecked = '1'
+    },
+    // 数量修改
+    changeSkuNum (e) {
+      const value = e.target.value - 0
+      this.skuNum = value
+      // 判断值是否有效 (小于1, 非数字)
+      if (value < 1 || isNaN(value)) {
+        this.skuNum = 1
+      } else {
+        this.skuNum = parseInt(value)
+      }
+    },
+    // 添加商品至购物车
+    async addCart () {
+      // 1. 发起请求添加到购物车
+      await reqAddCart(this.skuId, this.skuNum)
+      // 2. 获取购物车列表
+      const res = await reqGetCart()
+      console.log(res)
     }
   }
 }
