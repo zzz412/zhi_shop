@@ -1,4 +1,4 @@
-import { reqGetCart } from '@/api'
+import { reqGetCart, reqAddCart } from '@/api'
 
 // 购物车模块
 export default {
@@ -16,6 +16,10 @@ export default {
     async getCartList ({ commit }) {
       const res = await reqGetCart()
       commit('SET_CART_LIST', (res.length && res[0].cartInfoList) || [])
+    },
+    // 添加到购物车
+    async addCartList ({ commit }, { skuId, skuNum }) {
+      await reqAddCart(skuId, skuNum)
     }
   },
   getters: {

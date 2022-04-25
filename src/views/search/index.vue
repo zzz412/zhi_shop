@@ -51,7 +51,13 @@
                                     <i class="command">已有<span>{{goods.id}}</span>人评价</i>
                                 </div>
                                 <div class="operate">
-                                    <a href="success-cart.html" target="_blank" class="sui-btn btn-bordered btn-danger">加入购物车</a>
+                                    <a
+                                      href="javascript:void(0);"
+                                      class="sui-btn btn-bordered btn-danger"
+                                      @click="addCart(goods.id)"
+                                    >
+                                      加入购物车
+                                    </a>
                                     <a href="javascript:void(0);" class="sui-btn btn-bordered">收藏</a>
                                 </div>
                             </div>
@@ -186,6 +192,10 @@ export default {
       this.searchQuery.props.splice(i, 1)
       // 2. 调用函数 获取搜索结果
       this.getSearch()
+    },
+    // 添加到购物车
+    async addCart (skuId) {
+      await this.$store.dispatch('cart/addCartList', { skuId, skuNum: 1 })
     }
   }
 }

@@ -114,7 +114,6 @@ import ProductDetail from './components/ProductDetail'
 import Zoom from './components/Zoom'
 import ImageList from './components/ImageList'
 import { mapGetters } from 'vuex'
-import { reqAddCart, reqGetCart } from '@/api'
 
 export default {
   name: 'Detail',
@@ -157,10 +156,9 @@ export default {
     // 添加商品至购物车
     async addCart () {
       // 1. 发起请求添加到购物车
-      await reqAddCart(this.skuId, this.skuNum)
-      // 2. 获取购物车列表
-      const res = await reqGetCart()
-      console.log(res)
+      await this.$store.dispatch('cart/addCartList', { skuId: this.skuId, skuNum: this.skuNum })
+      // 2. 跳转到添加购物车成功页
+      this.$router.push('/addCart')
     }
   }
 }
