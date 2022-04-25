@@ -14,7 +14,9 @@ const routes = [
       // 搜索页  /search/:kw? 【? 0 -> 1个】
       { path: '/search/:keyword?', component: () => import('@/views/search'), name: 'search' },
       // 商品详情页  【通过设置props:true 将路由参数解析到组件中的props对象中】
-      { path: '/detail/:skuId', component: () => import('@/views/detail'), name: 'detail', props: true }
+      { path: '/detail/:skuId', component: () => import('@/views/detail'), name: 'detail', props: true },
+      // 购物车页
+      { path: '/cart', component: () => import('@/views/cart') }
     ]
   }
 ]

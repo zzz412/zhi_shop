@@ -1,0 +1,38 @@
+[
+  {
+    "id": 2,
+    "skuImgUrl": "/floor-1-2.png",
+    "skuName": "米家（MIJIA） 小米小白智能摄像机增强版 1080p高清360度全景拍摄AI增强",
+    "isChecked": "0",
+    "skuPrice": 1999,
+    "skuNum": 1,
+    "skuId": 1
+  },
+  {
+    "id": 3,
+    "skuImgUrl": "/floor-1-3.png",
+    "skuName": "123123123米家（MIJIA） 小米小白智能摄像机增强版 1080p高清360度全景拍摄AI增强",
+    "isChecked": "0",
+    "skuPrice": 2999,
+    "skuNum": 2,
+    "skuId": 3
+  },
+  {
+    "id": 4,
+    "skuImgUrl": "/floor-1-4.png",
+    "skuName": "米家 1080p高清360度全景拍摄AI增强",
+    "isChecked": "1",
+    "skuPrice": 2999,
+    "skuNum": 5,
+    "skuId": 4
+  },
+  {
+    "id": 5,
+    "skuImgUrl": "/floor-1-1.png",
+    "skuName": "12312 小米小白智能摄像机增强版 1080p高清360度全景拍摄AI增强",
+    "isChecked": "1",
+    "skuPrice": 2999,
+    "skuNum": 3,
+    "skuId": 5
+  }
+]
