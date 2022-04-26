@@ -66,12 +66,12 @@
         <div class="cart-tool">
             <!-- 全选 -->
             <div class="select-all">
-              <input class="chooseAll" type="checkbox">
+              <input class="chooseAll" type="checkbox" :checked="isCheckedAll" @change="changeAllChecked">
               <span>全选</span>
             </div>
             <!-- 操作 -->
             <div class="option">
-              <a href="#none">删除选中的商品</a>
+              <a href="javascript:" @click="deleteChecked">删除选中的商品</a>
               <a href="#none">移到我的关注</a>
               <a href="#none">清除下柜商品</a>
             </div>
@@ -112,6 +112,14 @@ export default {
         }
       })
       return sum
+    },
+    // 计算是否全部选中
+    isCheckedAll () {
+      // 全选 true 否则 false
+      // 什么情况下代表全选 =>  cartList中isChecked 没有为 0
+      // 什么情况下代表全选 =>  cartList中isChecked 都为1
+      // every 循环数组 当前每个值 都满足条件才返回true
+      return this.cartList.every(item => item.isChecked === 1) && this.cartList.length !== 0
     }
   },
   mounted () {
@@ -157,6 +165,24 @@ export default {
     async deleteSku (skuId) {
       // 1. 派发action删除商品
       await this.$store.dispatch('cart/deleteCart', skuId)
+      // 2. 重新获取购物车
+      this.getCartList()
+    },
+    // 修改全部商品状态
+    async changeAllChecked (e) {
+      // 1. 获取当前选中状态
+      const checked = e.target.checked ? 1 : 0
+      // 2. 将操作派发到action中
+      await this.$store.dispatch('cart/changeAllChecked', checked)
+      // 3. 重新加载购物车
+      this.getCartList()
+    },
+    // 删除选中商品
+    async deleteChecked () {
+      // 0. 判断是否没有选中的商品
+      if (this.cartList.filter(item => item.isChecked === 1).length === 0) return
+      // 1. 派发action
+      await this.$store.dispatch('cart/deleteChecked')
       // 2. 重新获取购物车
       this.getCartList()
     }
