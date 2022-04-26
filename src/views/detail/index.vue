@@ -157,6 +157,8 @@ export default {
     async addCart () {
       // 1. 发起请求添加到购物车
       await this.$store.dispatch('cart/addCartList', { skuId: this.skuId, skuNum: this.skuNum })
+      // 1.1 将当前商品信息存储到本地中
+      sessionStorage.setItem('ZHI_GOODS_INFO', JSON.stringify({ ...this.skuInfo, skuNum: this.skuNum }))
       // 2. 跳转到添加购物车成功页
       this.$router.push('/addCart')
     }

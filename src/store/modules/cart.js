@@ -1,4 +1,4 @@
-import { reqGetCart, reqAddCart } from '@/api'
+import { reqGetCart, reqAddCart, reqCartChecked, reqDeleteCart } from '@/api'
 
 // 购物车模块
 export default {
@@ -20,6 +20,14 @@ export default {
     // 添加到购物车
     async addCartList ({ commit }, { skuId, skuNum }) {
       await reqAddCart(skuId, skuNum)
+    },
+    // 修改购物车状态
+    async changeCartChecked ({ commit }, { skuId, checked }) {
+      await reqCartChecked(skuId, checked)
+    },
+    // 删除购物车商品
+    async deleteCart ({ commit }, skuId) {
+      await reqDeleteCart(skuId)
     }
   },
   getters: {

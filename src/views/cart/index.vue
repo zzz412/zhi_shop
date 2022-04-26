@@ -21,7 +21,7 @@
               <ul class="cart-list" v-for="cart in cartList" :key="cart.id">
                   <!-- 勾选框 -->
                   <li class="cart-list-con1">
-                    <input type="checkbox" name="chk_list" :checked="cart.isChecked === 1">
+                    <input type="checkbox" name="chk_list" :checked="cart.isChecked === 1" @change="changeChecked(cart.skuId, $event)">
                   </li>
                   <!-- 商品图片与商品名 -->
                   <li class="cart-list-con2">
@@ -55,7 +55,7 @@
                   </li>
                   <!-- 操作商品 -->
                   <li class="cart-list-con7">
-                    <a href="#none" class="sindelet">删除</a>
+                    <a href="javascript:" class="sindelet" @click="deleteSku(cart.skuId)">删除</a>
                     <br>
                     <a href="#none">移到收藏</a>
                   </li>
@@ -141,6 +141,23 @@ export default {
       if (!skuNum) return
       await this.$store.dispatch('cart/addCartList', { skuId, skuNum })
       // 4. 重新获取购物车数据
+      this.getCartList()
+    },
+    // 修改商品状态
+    async changeChecked (skuId, e) {
+      // console.log(skuId)
+      // 1. 获取商品选中状态
+      const isChecked = e.target.checked ? 1 : 0
+      // 2. 派发action
+      await this.$store.dispatch('cart/changeCartChecked', { skuId, checked: isChecked })
+      // 3. 重新加载购物车
+      this.getCartList()
+    },
+    // 删除商品
+    async deleteSku (skuId) {
+      // 1. 派发action删除商品
+      await this.$store.dispatch('cart/deleteCart', skuId)
+      // 2. 重新获取购物车
       this.getCartList()
     }
   }

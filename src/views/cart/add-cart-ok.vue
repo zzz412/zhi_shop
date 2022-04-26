@@ -5,12 +5,12 @@
       <h3><i class="sui-icon icon-pc-right"></i>商品已成功加入购物车！</h3>
       <div class="goods">
         <div class="left-good">
-          <div class="left-pic"><img src="@/assets/images/gocart.jpg" /></div>
+          <div class="left-pic"><img :src="skuInfo.skuDefaultImg" /></div>
           <div class="right-info">
             <p class="title">
-              美的（Midea)电饭煲WFZ5099IH IH电磁加热 1250W大火力 钛金釜5L电饭锅
+              {{skuInfo.skuName}}
             </p>
-            <p class="attr">颜色：WFZ5099IH/5L钛金釜内胆 数量：1</p>
+            <p class="attr"> {{skuInfo.skuDesc}} 数量：{{skuInfo.skuNum}}</p>
           </div>
         </div>
         <div class="right-gocart">
@@ -29,7 +29,17 @@
 
 <script>
 export default {
-  name: 'AddCartOk'
+  name: 'AddCartOk',
+  data () {
+    return {
+      skuInfo: {}
+    }
+  },
+  mounted () {
+    // 从本地存储中获取商品信息
+    const skuInfo = JSON.parse(sessionStorage.getItem('ZHI_GOODS_INFO'))
+    this.skuInfo = skuInfo
+  }
 }
 </script>
 
@@ -68,6 +78,9 @@ export default {
           border: 1px solid #dfdfdf;
           width: 60px;
           float: left;
+          img {
+            width: 60px;
+          }
         }
 
         .right-info {

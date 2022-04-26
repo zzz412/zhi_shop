@@ -196,6 +196,7 @@ export default {
     // 添加到购物车
     async addCart (skuId) {
       await this.$store.dispatch('cart/addCartList', { skuId, skuNum: 1 })
+      alert('加入成功')
     }
   }
 }

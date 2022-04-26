@@ -34,3 +34,9 @@ export const reqAddCart = (skuId, skuNum) => request({ method: 'post', url: `/ap
 
 // 获取购物车列表
 export const reqGetCart = () => request({ method: 'get', url: '/api/cart/cartList' })
+
+// 修改购物车商品状态
+export const reqCartChecked = (skuId, isChecked) => request({ method: 'get', url: `/api/cart/checkCart/${skuId}/${isChecked}` })
+
+// 删除购物车商品
+export const reqDeleteCart = (skuId) => request({ method: 'delete', url: `/api/cart/deleteCart/${skuId}` })

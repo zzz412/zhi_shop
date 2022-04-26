@@ -6,7 +6,8 @@ import { getV4 } from '@/utils/auth'
 // 通过create创建axios实例
 const request = Axios.create({
   // 配置公共请求地址
-  baseURL: 'http://39.98.123.211',
+  // baseURL: 'http://39.98.123.211',
+  baseURL: 'http://sph-h5.atguigu.cn/',
   // 请求超时时间
   timeout: 5000
 })
