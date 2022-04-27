@@ -7,7 +7,8 @@ import { getV4 } from '@/utils/auth'
 const request = Axios.create({
   // 配置公共请求地址
   // baseURL: 'http://39.98.123.211',
-  baseURL: 'http://sph-h5.atguigu.cn/',
+  // baseURL: 'http://sph-h5.atguigu.cn/',
+  baseURL: 'http://gmall-h5-api.atguigu.cn',
   // 请求超时时间
   timeout: 5000
 })

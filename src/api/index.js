@@ -40,3 +40,6 @@ export const reqCartChecked = (skuId, isChecked) => request({ method: 'get', url
 
 // 删除购物车商品
 export const reqDeleteCart = (skuId) => request({ method: 'delete', url: `/api/cart/deleteCart/${skuId}` })
+
+// 用户登录
+export const reqLogin = (data) => request({ method: 'post', url: '/api/user/passport/login', data })
