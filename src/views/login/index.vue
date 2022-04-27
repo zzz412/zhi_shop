@@ -75,10 +75,10 @@ export default {
       // 2. 发起请求
       try {
         await this.$store.dispatch('user/login', this.formInput)
-        // 3. 登录成功
+        // 3. 登录成功 跳转页面
+        this.$router.push('/')
       } catch (error) {
         // 3. 登录失败 清空输入框
-        console.log('发生了错误')
         this.formInput = {}
       }
     }

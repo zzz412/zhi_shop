@@ -21,8 +21,8 @@ const routes = [
       { path: '/cart', component: () => import('@/views/cart') },
       // 添加购物车成功页
       { path: '/addCart', component: () => import('@/views/cart/add-cart-ok') },
-      // 订单确认页
-      { path: '/trade', component: () => import('@/views/trade') }
+      // 订单确认页  meta额外信息
+      { path: '/trade', component: () => import('@/views/trade'), meta: { isRole: true } }
     ]
   },
   // 布局2

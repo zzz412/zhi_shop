@@ -1,5 +1,6 @@
 // 封装请求库
 import Axios from 'axios'
+import store from '@/store'
 
 import { getV4 } from '@/utils/auth'
 
@@ -17,6 +18,10 @@ const request = Axios.create({
 request.interceptors.request.use(config => {
   // 给每个请求携带 userTempId  通过uuid的v4加密 生成ID
   config.headers.userTempId = getV4()
+  // 给每个请求携带 token
+  if (store.getters.token) {
+    config.headers.token = store.getters.token
+  }
   return config
 })
 

@@ -12,5 +12,9 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   modules: {
     home, search, detail, cart, user
+  },
+  getters: {
+    token: state => state.user.token,
+    loginName: state => state.user.userInfo.loginName
   }
 })

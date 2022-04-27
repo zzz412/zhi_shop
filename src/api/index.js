@@ -43,3 +43,6 @@ export const reqDeleteCart = (skuId) => request({ method: 'delete', url: `/api/c
 
 // 用户登录
 export const reqLogin = (data) => request({ method: 'post', url: '/api/user/passport/login', data })
+
+// 获取用户信息
+export const reqUserInfo = () => request({ method: 'get', url: '/api/user/passport/auth/getUserInfo' })

@@ -7,9 +7,15 @@
               <div class="loginList">
                   <p>智品汇欢迎您！</p>
                   <p>
-                      <span>请</span>
-                      <router-link to="/login">登录</router-link>
-                      <a href="javascript:" class="register">免费注册</a>
+                      <template v-if="!loginName">
+                        <span>请</span>
+                        <router-link to="/login">登录</router-link>
+                        <a href="javascript:" class="register">免费注册</a>
+                      </template>
+                      <template v-else>
+                        <span>{{loginName}}</span>
+                        <a href="javascript:" class="register">退出登录</a>
+                      </template>
                   </p>
               </div>
               <div class="typeList">
@@ -54,12 +60,17 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
+
 export default {
   name: 'AppHeader',
   data () {
     return {
       kw: ''
     }
+  },
+  computed: {
+    ...mapGetters(['loginName'])
   },
   methods: {
     goSearch () {
