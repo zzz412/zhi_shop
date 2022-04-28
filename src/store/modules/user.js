@@ -1,5 +1,5 @@
 // 用户模块
-import { reqLogin, reqUserInfo } from '@/api'
+import { reqLogin, reqUserInfo, reqLogout } from '@/api'
 import { SET_TOKEN, GET_TOKEN, REMOVE_TOKEN } from '@/utils/userToken'
 
 export default {
@@ -39,6 +39,13 @@ export default {
       const res = await reqUserInfo()
       // 2. 将用户信息保存
       commit('SET_USERINFO', res)
+    },
+    // 用户退出登录
+    async logout ({ commit }) {
+      // 1. 发起请求退出登录
+      await reqLogout()
+      // 2. 清理本地状态
+      commit('RESET_STATE')
     }
   },
   getters: {}

@@ -31,7 +31,9 @@ const routes = [
     component: LoginLayout,
     children: [
       // 登录页
-      { path: '', component: () => import('@/views/login') }
+      { path: '', component: () => import('@/views/login') },
+      // 注册页
+      { path: '/register', component: () => import('@/views/register') }
     ]
   }
 ]

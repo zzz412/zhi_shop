@@ -47,7 +47,7 @@
               <li><img src="@/assets/images/ali.png" alt=""></li>
               <li><img src="@/assets/images/weixin.png" alt=""></li>
             </ul>
-            <a href="##" class="register">立即注册</a>
+            <router-link to="register" class="register">立即注册</router-link>
           </div>
         </div>
       </div>

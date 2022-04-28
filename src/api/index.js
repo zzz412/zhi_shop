@@ -46,3 +46,6 @@ export const reqLogin = (data) => request({ method: 'post', url: '/api/user/pass
 
 // 获取用户信息
 export const reqUserInfo = () => request({ method: 'get', url: '/api/user/passport/auth/getUserInfo' })
+
+// 用户退出登录
+export const reqLogout = () => request({ method: 'get', url: '/api/user/passport/logout' })
