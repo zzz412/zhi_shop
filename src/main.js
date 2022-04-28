@@ -9,6 +9,9 @@ import '@/mock'
 // 导入全局组件
 import '@/components'
 
+// 导入validate验证规则
+import '@/utils/validation'
+
 // 初始化CSS
 import 'normalize.css'
 
