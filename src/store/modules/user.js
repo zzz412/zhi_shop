@@ -1,5 +1,5 @@
 // 用户模块
-import { reqLogin, reqUserInfo, reqLogout } from '@/api'
+import { reqLogin, reqUserInfo, reqLogout, reqCode, reqRegister } from '@/api'
 import { SET_TOKEN, GET_TOKEN, REMOVE_TOKEN } from '@/utils/userToken'
 
 export default {
@@ -46,6 +46,15 @@ export default {
       await reqLogout()
       // 2. 清理本地状态
       commit('RESET_STATE')
+    },
+    // 获取注册验证码
+    async getCode ({ commit }, phone) {
+      const res = await reqCode(phone)
+      console.log(res)
+    },
+    // 注册用户
+    async register ({ commit }, data) {
+      await reqRegister(data)
     }
   },
   getters: {}

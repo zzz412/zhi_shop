@@ -49,3 +49,9 @@ export const reqUserInfo = () => request({ method: 'get', url: '/api/user/passpo
 
 // 用户退出登录
 export const reqLogout = () => request({ method: 'get', url: '/api/user/passport/logout' })
+
+// 获取注册验证码
+export const reqCode = (phone) => request({ method: 'get', url: '/api/user/passport/sendCode/' + phone })
+
+// 注册用户
+export const reqRegister = (data) => request({ method: 'post', url: '/api/user/passport/register', data })

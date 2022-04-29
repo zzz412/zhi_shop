@@ -5,7 +5,7 @@
     <h3>
       注册新用户
       <span class="go">
-        我有账号，去 <a href="login.html" target="_blank">登陆</a>
+        我有账号，去 <router-link to="/login">登陆</router-link>
       </span>
     </h3>
     <!-- 3. 使用验证组件包裹需要验证的模块 -->
@@ -20,7 +20,7 @@
       <form @submit.prevent="submitForm">
         <!-- 手机号 -->
         <div class="content">
-          <ValidationProvider name="phone" rules="required|length:11|phone" v-slot="{ errors }">
+          <ValidationProvider ref="phone" name="phone" rules="required|length:11|phone" v-slot="{ errors }">
               <label>手机号:</label>
               <input type="text" placeholder="请输入你的手机号" v-model="formInput.phone">
               <span class="error-msg">{{ errors[0] }}</span>
@@ -31,7 +31,7 @@
           <ValidationProvider name="code" rules="required|length:6|integer" v-slot="{ errors }">
             <label>验证码:</label>
             <input type="text" placeholder="请输入验证码" v-model="formInput.code">
-            <button class="code-btn">获取验证码</button>
+            <button class="code-btn" type="button" @click="getCode">获取验证码</button>
             <span class="error-msg">{{ errors[0] }}</span>
           </ValidationProvider>
         </div>
@@ -93,7 +93,22 @@ export default {
       console.log(success)
       if (!success) return
       // 2. 派发actions 去注册用户
-      console.log('注册成功')
+      const { phone, password, code } = this.formInput
+      try {
+        await this.$store.dispatch('user/register', { phone, password, code })
+        console.log('注册成功')
+        this.$router.push('/login')
+      } catch (error) {
+        console.log('注册失败')
+      }
+    },
+    // 获取验证码
+    async getCode () {
+      // 1. 验证手机号格式是否通过校验
+      const { valid } = await this.$refs.phone.validate()
+      if (!valid) return
+      // 2. 校验成功后发起请求获取验证码
+      this.$store.dispatch('user/getCode', this.formInput.phone)
     }
   }
 }
