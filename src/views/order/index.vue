@@ -98,17 +98,17 @@
                       </div>
                     </td>
                     <template v-if="i === 0">
-                      <td rowspan="2" width="8%" class="center">{{order.consignee}}</td>
-                      <td rowspan="2" width="13%" class="center">
+                      <td :rowspan="order.orderDetailList.length" width="8%" class="center">{{order.consignee}}</td>
+                      <td :rowspan="order.orderDetailList.length" width="13%" class="center">
                         <ul class="unstyled">
                           <li>总金额¥{{order.totalAmount}}.00</li>
                           <li>在线支付</li>
                         </ul>
                       </td>
-                      <td rowspan="2" width="8%" class="center">
+                      <td :rowspan="order.orderDetailList.length" width="8%" class="center">
                         <a href="#" class="btn">{{order.orderStatusName}} </a>
                       </td>
-                      <td rowspan="2" width="13%" class="center">
+                      <td :rowspan="order.orderDetailList.length" width="13%" class="center">
                         <ul class="unstyled">
                           <li>
                             <a href="mycomment.html" target="_blank">评价|晒单</a>
@@ -121,34 +121,7 @@
               </table>
             </div>
             <!-- 分页器 -->
-            <div class="choose-order">
-              <div class="pagination">
-                <ul>
-                  <li class="prev disabled">
-                    <a href="javascript:">«上一页</a>
-                  </li>
-                  <li class="page actived">
-                    <a href="javascript:">1</a>
-                  </li>
-                  <li class="page">
-                    <a href="javascript:">2</a>
-                  </li>
-                  <li class="page">
-                    <a href="javascript:">3</a>
-                  </li>
-                  <li class="page">
-                    <a href="javascript:">4</a>
-                  </li>
-
-                  <li class="next disabled">
-                    <a href="javascript:">下一页»</a>
-                  </li>
-                </ul>
-                <div>
-                  <span>&nbsp;&nbsp;&nbsp;&nbsp;共2页&nbsp;</span>
-                </div>
-              </div>
-            </div>
+            <Pagination :total="total" :pageSize="4" :page="page" @pageChange="pageChange"></Pagination>
           </div>
         </div>
       </div>
@@ -163,14 +136,27 @@ export default {
   name: 'MyOrder',
   data () {
     return {
-      orderList: [] // 订单列表
+      orderList: [], // 订单列表
+      page: 1, // 当前页码
+      total: 0 // 总条数
     }
   },
   methods: {
     // 获取订单列表
     async getOrderList () {
-      const { records } = await reqMyOrder(1, 4)
+      const { records, total } = await reqMyOrder(this.page, 4)
+      this.total = total
       this.orderList = records
+      // // 设置滚动条回到顶部
+      // document.querySelector('html').scrollTo({ y: 0 })
+    },
+    // 页码改变
+    pageChange (index) {
+      // console.log(index)
+      // 1. 改变页码
+      this.page = index
+      // 2. 发起请求
+      this.getOrderList()
     }
   },
   mounted () {

@@ -74,13 +74,12 @@
 
 <script>
 import Bread from './components/Bread'
-import Pagination from './components/Pagination'
 import Selector from './components/Selector'
 import { mapGetters } from 'vuex'
 
 export default {
   name: 'SearchView',
-  components: { Bread, Pagination, Selector },
+  components: { Bread, Selector },
   data () {
     return {
       // 搜索参数
