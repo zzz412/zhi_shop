@@ -19,7 +19,7 @@
                   </p>
               </div>
               <div class="typeList">
-                  <a href="javascript:">我的订单</a>
+                  <router-link to="/myOrder">我的订单</router-link>
                   <router-link to="/cart">我的购物车</router-link>
                   <a href="javascript:">我的智品汇</a>
                   <a href="javascript:">智品汇会员</a>

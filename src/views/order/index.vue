@@ -54,9 +54,11 @@
         <div class="order-right">
           <!--订单内容-->
           <div class="order-content">
+            <!-- 标题 -->
             <div class="title">
               <h3>我的订单</h3>
             </div>
+            <!-- 订单表头 -->
             <div class="chosetype">
               <table>
                 <thead>
@@ -71,125 +73,54 @@
                 </thead>
               </table>
             </div>
+            <!-- 订单列表 -->
             <div class="orders">
-              <table class="order-item">
+              <table class="order-item" v-for="order in orderList" :key="order.id">
                 <thead>
                   <tr>
                     <th colspan="5">
-                      <span class="ordertitle"
-                        >2017-02-11 11:59 订单编号：7867473872181848
-                        <span class="pull-right delete"
-                          ><img src="@/assets/images/delete.png" /></span
-                      ></span>
+                      <span class="ordertitle">
+                        {{order.createTime}} 订单编号：{{order.outTradeNo}}
+                        <span class="pull-right delete"><img src="@/assets/images/delete.png" />
+                        </span>
+                      </span>
                     </th>
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
+                  <tr v-for="item, i in order.orderDetailList" :key="item.skuId">
                     <td width="60%">
                       <div class="typographic">
-                        <img src="@/assets/images/goods.png" />
-                        <a href="#" class="block-text"
-                          >包邮 正品玛姬儿压缩面膜无纺布纸膜100粒
-                          送泡瓶面膜刷喷瓶 新款</a
-                        >
-                        <span>x1</span>
+                        <img :src="item.imgUrl" width="80" height="80"/>
+                        <a href="#" class="block-text">{{item.skuName}}</a>
+                        <span>x{{item.skuNum}}</span>
                         <a href="#" class="service">售后申请</a>
                       </div>
                     </td>
-                    <td rowspan="2" width="8%" class="center">小丽</td>
-                    <td rowspan="2" width="13%" class="center">
-                      <ul class="unstyled">
-                        <li>总金额¥138.00</li>
-                        <li>在线支付</li>
-                      </ul>
-                    </td>
-                    <td rowspan="2" width="8%" class="center">
-                      <a href="#" class="btn">已完成 </a>
-                    </td>
-                    <td rowspan="2" width="13%" class="center">
-                      <ul class="unstyled">
-                        <li>
-                          <a href="mycomment.html" target="_blank">评价|晒单</a>
-                        </li>
-                      </ul>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td width="50%">
-                      <div class="typographic">
-                        <img src="@/assets/images/goods.png" />
-                        <a href="#" class="block-text"
-                          >包邮 正品玛姬儿压缩面膜无纺布纸膜100粒
-                          送泡瓶面膜刷喷瓶 新款</a
-                        >
-                        <span>x1</span>
-                        <a href="#" class="service">售后申请</a>
-                      </div>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-
-              <table class="order-item">
-                <thead>
-                  <tr>
-                    <th colspan="5">
-                      <span class="ordertitle"
-                        >2017-02-11 11:59 订单编号：7867473872181848
-                        <span class="pull-right delete"
-                          ><img src="@/assets/images/delete.png" /></span
-                      ></span>
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td width="60%">
-                      <div class="typographic">
-                        <img src="@/assets/images/goods.png" />
-                        <a href="#" class="block-text"
-                          >包邮 正品玛姬儿压缩面膜无纺布纸膜100粒
-                          送泡瓶面膜刷喷瓶 新款</a
-                        >
-                        <span>x1</span>
-                        <a href="#" class="service">售后申请</a>
-                      </div>
-                    </td>
-                    <td rowspan="2" width="8%" class="center">小丽</td>
-                    <td rowspan="2" width="13%" class="center">
-                      <ul class="unstyled">
-                        <li>总金额¥138.00</li>
-                        <li>在线支付</li>
-                      </ul>
-                    </td>
-                    <td rowspan="2" width="8%" class="center">
-                      <a href="#" class="btn">已完成 </a>
-                    </td>
-                    <td rowspan="2" width="13%" class="center">
-                      <ul class="unstyled">
-                        <li>
-                          <a href="mycomment.html" target="_blank">评价|晒单</a>
-                        </li>
-                      </ul>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td width="50%">
-                      <div class="typographic">
-                        <img src="@/assets/images/goods.png" />
-                        <a href="#" class="block-text"
-                          >包邮 正品玛姬儿压缩面膜无纺布纸膜100粒
-                          送泡瓶面膜刷喷瓶 新款</a
-                        >
-                        <span>x1</span>
-                        <a href="#" class="service">售后申请</a>
-                      </div>
-                    </td>
+                    <template v-if="i === 0">
+                      <td rowspan="2" width="8%" class="center">{{order.consignee}}</td>
+                      <td rowspan="2" width="13%" class="center">
+                        <ul class="unstyled">
+                          <li>总金额¥{{order.totalAmount}}.00</li>
+                          <li>在线支付</li>
+                        </ul>
+                      </td>
+                      <td rowspan="2" width="8%" class="center">
+                        <a href="#" class="btn">{{order.orderStatusName}} </a>
+                      </td>
+                      <td rowspan="2" width="13%" class="center">
+                        <ul class="unstyled">
+                          <li>
+                            <a href="mycomment.html" target="_blank">评价|晒单</a>
+                          </li>
+                        </ul>
+                      </td>
+                    </template>
                   </tr>
                 </tbody>
               </table>
             </div>
+            <!-- 分页器 -->
             <div class="choose-order">
               <div class="pagination">
                 <ul>
@@ -219,62 +150,6 @@
               </div>
             </div>
           </div>
-          <!--猜你喜欢-->
-          <div class="like">
-            <h4 class="kt">猜你喜欢</h4>
-            <ul class="like-list">
-              <li class="likeItem">
-                <div class="p-img">
-                  <img src="@/assets/images/itemlike01.png" />
-                </div>
-                <div class="attr">
-                  <em>DELL戴尔Ins 15MR-7528SS 15英寸 银色 笔记本</em>
-                </div>
-                <div class="price">
-                  <em>¥</em>
-                  <i>3699.00</i>
-                </div>
-                <div class="commit">已有6人评价</div>
-              </li>
-              <li class="likeItem">
-                <div class="p-img">
-                  <img src="@/assets/images/itemlike02.png" />
-                </div>
-                <div class="attr">Apple苹果iPhone 6s/6s Plus 16G 64G 128G</div>
-                <div class="price">
-                  <em>¥</em>
-                  <i>4388.00</i>
-                </div>
-                <div class="commit">已有700人评价</div>
-              </li>
-              <li class="likeItem">
-                <div class="p-img">
-                  <img src="@/assets/images/itemlike03.png" />
-                </div>
-                <div class="attr">
-                  DELL戴尔Ins 15MR-7528SS 15英寸 银色 笔记本
-                </div>
-                <div class="price">
-                  <em>¥</em>
-                  <i>4088.00</i>
-                </div>
-                <div class="commit">已有700人评价</div>
-              </li>
-              <li class="likeItem">
-                <div class="p-img">
-                  <img src="@/assets/images/itemlike04.png" />
-                </div>
-                <div class="attr">
-                  DELL戴尔Ins 15MR-7528SS 15英寸 银色 笔记本
-                </div>
-                <div class="price">
-                  <em>¥</em>
-                  <i>4088.00</i>
-                </div>
-                <div class="commit">已有700人评价</div>
-              </li>
-            </ul>
-          </div>
         </div>
       </div>
     </div>
@@ -282,8 +157,25 @@
 </template>
 
 <script>
+import { reqMyOrder } from '@/api/order'
+
 export default {
-  name: 'MyOrder'
+  name: 'MyOrder',
+  data () {
+    return {
+      orderList: [] // 订单列表
+    }
+  },
+  methods: {
+    // 获取订单列表
+    async getOrderList () {
+      const { records } = await reqMyOrder(1, 4)
+      this.orderList = records
+    }
+  },
+  mounted () {
+    this.getOrderList()
+  }
 }
 </script>
 
@@ -414,12 +306,17 @@ export default {
                   img {
                     float: left;
                     margin-right: 10px;
+                    width: 64px;
+                    height: 64px;
                   }
                   a {
                     float: left;
                     min-width: 80px;
                     max-width: 250px;
                     color: #e1251b;
+                    &.block-text {
+                      min-width: 250px;
+                    }
                     &.service {
                       color: #666;
                     }
