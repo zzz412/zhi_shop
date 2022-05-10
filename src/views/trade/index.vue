@@ -5,7 +5,10 @@
     <!-- 主体内容 -->
     <div class="content">
       <!-- 收货地址 -->
-      <h5 class="receive">收件人信息 <a class="add_btn" href="javascript:">新增收货地址</a></h5>
+      <h5 class="receive">
+        收件人信息
+        <a class="add_btn" href="javascript:" @click="$refs.dialog.showDialog = true">新增收货地址</a>
+      </h5>
       <div class="address clearFix" v-for="address, i in addressList" :key="address.id">
         <span class="username" :class="{ selected: selectedIndex === i }">{{address.consignee}}</span>
         <p @click="selectedIndex = i">
@@ -105,14 +108,18 @@
     <div class="sub clearFix">
       <router-link to="/pay" class="subBtn">提交订单</router-link>
     </div>
+    <!-- 地址对话框 -->
+    <AddressDialog ref="dialog"/>
   </div>
 </template>
 
 <script>
 import { reqAddressList, reqOrder } from '@/api/order'
+import AddressDialog from './components/AddressDialog'
 
 export default {
   name: 'Trade',
+  components: { AddressDialog },
   data () {
     return {
       // 地址列表
