@@ -9,3 +9,12 @@ export const reqAddressList = () => request({ url: '/api/user/userAddress/auth/f
 
 // 获取订单详情
 export const reqOrder = () => request({ url: '/api/order/auth/trade', method: 'get' })
+
+// 新增地址
+export const addAddress = data => request({ url: '/api/user/userAddress/auth/save', method: 'post', data })
+
+// 修改地址
+export const updateAddress = data => request({ url: '/api/user/userAddress/auth/update', method: 'post', data })
+
+// 删除地址
+export const removeAddress = id => request({ url: '/api/user/userAddress/auth/delete/' + id, method: 'get' })

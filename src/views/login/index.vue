@@ -76,7 +76,8 @@ export default {
       try {
         await this.$store.dispatch('user/login', this.formInput)
         // 3. 登录成功 跳转页面
-        this.$router.push('/')
+        const path = this.$route.query.redirect
+        this.$router.push(path || '/')
       } catch (error) {
         // 3. 登录失败 清空输入框
         this.formInput = {}

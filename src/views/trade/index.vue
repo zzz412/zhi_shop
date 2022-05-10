@@ -5,7 +5,7 @@
     <!-- 主体内容 -->
     <div class="content">
       <!-- 收货地址 -->
-      <h5 class="receive">收件人信息</h5>
+      <h5 class="receive">收件人信息 <a class="add_btn" href="javascript:">新增收货地址</a></h5>
       <div class="address clearFix" v-for="address, i in addressList" :key="address.id">
         <span class="username" :class="{ selected: selectedIndex === i }">{{address.consignee}}</span>
         <p @click="selectedIndex = i">
@@ -13,6 +13,10 @@
           <span class="s2">{{address.phoneNum}}</span>
           <span class="s3" v-if="address.isDefault === '1'">默认地址</span>
         </p>
+        <div class="right">
+          <span>修改</span>
+          <span>删除</span>
+        </div>
       </div>
       <div class="line"></div>
 
@@ -162,9 +166,20 @@ export default {
     line-height: 36px;
     margin: 18px 0;
   }
+  .add_btn {
+    float: right;
+  }
   .address {
     padding-left: 20px;
     margin-bottom: 15px;
+    .right {
+        float: right;
+        line-height: 22px;
+        span {
+          margin-left: 20px;
+          cursor: pointer;
+        }
+    }
     .username {
       float: left;
       width: 100px;

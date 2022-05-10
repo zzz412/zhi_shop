@@ -1,5 +1,6 @@
 <template>
   <div id="app">
+    <button @click="$store.commit('user/SET_TOKEN', '123123')">点我</button>
     <router-view></router-view>
   </div>
 </template>

@@ -28,7 +28,7 @@ router.beforeEach(async (to, from, next) => {
           // 清理token
           store.commit('user/RESET_STATE')
           // 跳转到登录
-          next('/login')
+          next('/login?redirect=' + to.path)
         }
       } else {
         next()
@@ -37,7 +37,7 @@ router.beforeEach(async (to, from, next) => {
   } else {
     // 无token 验证当前路由是否需要权限
     if (to.meta.isRole) {
-      next('/login')
+      next('/login?redirect=' + to.path)
     } else {
       next()
     }
