@@ -1,36 +1,32 @@
 <template>
   <!-- 地址对话框 -->
-  <Dialog title="收货地址" :isShow="showDialog" @hidden="showDialog = false">
+  <Dialog title="收货地址" :isShow="showDialog" @hidden="showDialog = false" @ok="submitForm">
     <form class="sui-form">
       <!-- 收货人 -->
       <div class="control-group">
         <label class="control-label">收货人：</label>
         <div class="controls">
-          <input type="text" class="input-medium">
+          <input type="text" class="input-medium" v-model="formInput.consignee">
         </div>
       </div>
       <!-- 联系电话 -->
       <div class="control-group">
         <label class="control-label">联系电话：</label>
         <div class="controls">
-          <input type="text" class="input-medium">
+          <input type="text" class="input-medium" v-model="formInput.phoneNum">
         </div>
       </div>
       <!-- 所在地区 -->
       <div class="control-group">
         <label class="control-label">所在地区：</label>
         <div class="controls">
-          <select style="width: 100px;">
-            <option value="">1</option>
-            <option value="">2</option>
-            <option value="">3</option>
-            <option value="">4</option>
+          <select style="width: 100px;" v-model="formInput.regionId">
+            <option value="">请选择地区</option>
+            <option :value="region.id" v-for="region in regionList" :key="region.id">{{region.regionName}}</option>
           </select>
-          <select style="width: 100px;margin-left: 10px;">
-            <option value="">1</option>
-            <option value="">2</option>
-            <option value="">3</option>
-            <option value="">4</option>
+          <select style="width: 100px;margin-left: 10px;" v-model="formInput.provinceId">
+            <option value="">请选择省份</option>
+            <option :value="province.id" v-for="province in provinceList" :key="province.id">{{province.name}}</option>
           </select>
         </div>
       </div>
@@ -38,14 +34,14 @@
       <div class="control-group">
         <label class="control-label">详细地址：</label>
         <div class="controls">
-          <input type="text" class="input-medium" style="width: 300px;">
+          <input type="text" class="input-medium" style="width: 300px;" v-model="formInput.userAddress">
         </div>
       </div>
       <!-- 是否默认地址 -->
       <div class="control-group">
         <label class="control-label">是否默认地址：</label>
         <div class="controls">
-          <input type="checkbox">
+          <input type="checkbox" v-model="formInput.isCheckDefault">
         </div>
       </div>
     </form>
@@ -53,13 +49,66 @@
 </template>
 
 <script>
+import { reqRegion, reqProvince, addAddress } from '@/api/order'
+
 export default {
   name: 'AddressDialog',
   data () {
     return {
       // 显示dialog
-      showDialog: true
+      showDialog: true,
+      // 表单数据
+      formInput: {
+        regionId: '',
+        provinceId: ''
+      },
+      // 地区列表
+      regionList: [],
+      // 省份列表
+      provinceList: []
     }
+  },
+  // 监听器
+  watch: {
+    // 监听对象中的单个属性
+    'formInput.regionId': 'getProvinceList'
+  },
+  methods: {
+    // 获取地区
+    async getRegionList () {
+      const res = await reqRegion()
+      this.regionList = res
+    },
+    // 获取省份
+    async getProvinceList () {
+      // 清除之前选择的省份
+      this.formInput.provinceId = ''
+      const res = await reqProvince(this.formInput.regionId)
+      this.provinceList = res
+    },
+    // 提交数据
+    async submitForm () {
+      try {
+        // 处理是否为默认地址
+        this.formInput.isDefault = this.formInput.isCheckDefault ? '1' : '0'
+        // 发起请求新增地址
+        await addAddress(this.formInput)
+        // 调用父组件方法 重新渲染收货地址
+        this.$parent.getAddressList()
+        // 关闭对话框
+        this.showDialog = false
+        // 清除form表单内容
+        this.formInput = {
+          regionId: '',
+          provinceId: ''
+        }
+      } catch (error) {
+        console.log('新增地址失败')
+      }
+    }
+  },
+  mounted () {
+    this.getRegionList()
   }
 }
 </script>

@@ -18,3 +18,9 @@ export const updateAddress = data => request({ url: '/api/user/userAddress/auth/
 
 // 删除地址
 export const removeAddress = id => request({ url: '/api/user/userAddress/auth/delete/' + id, method: 'get' })
+
+// 获取地区
+export const reqRegion = () => request({ url: '/api/user/userAddress/auth/findBaseRegion', method: 'get' })
+
+// 获取省份
+export const reqProvince = id => request({ url: '/api/user/userAddress/auth/findBaseProvinceByRegionId/' + id, method: 'get' })

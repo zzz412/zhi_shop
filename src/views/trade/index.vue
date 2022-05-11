@@ -18,7 +18,7 @@
         </p>
         <div class="right">
           <span>修改</span>
-          <span>删除</span>
+          <span @click="removeAddress(address.id)">删除</span>
         </div>
       </div>
       <div class="line"></div>
@@ -114,7 +114,7 @@
 </template>
 
 <script>
-import { reqAddressList, reqOrder } from '@/api/order'
+import { reqAddressList, reqOrder, removeAddress } from '@/api/order'
 import AddressDialog from './components/AddressDialog'
 
 export default {
@@ -146,6 +146,12 @@ export default {
     async getOrderInfo () {
       const res = await reqOrder()
       this.orderInfo = res
+    },
+    // 删除收货地址
+    async removeAddress (id) {
+      await removeAddress(id)
+      // 重新渲染地址列表
+      this.getAddressList()
     }
   },
   mounted () {
