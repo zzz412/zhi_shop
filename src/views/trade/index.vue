@@ -17,7 +17,7 @@
           <span class="s3" v-if="address.isDefault === '1'">默认地址</span>
         </p>
         <div class="right">
-          <span>修改</span>
+          <span @click="updateAddress(address)">修改</span>
           <span @click="removeAddress(address.id)">删除</span>
         </div>
       </div>
@@ -66,6 +66,7 @@
         <textarea
           placeholder="建议留言前先与商家沟通确认"
           class="remarks-cont"
+          v-model="orderComment"
         ></textarea>
       </div>
       <div class="line"></div>
@@ -106,7 +107,7 @@
     </div>
     <!-- 提交按钮 -->
     <div class="sub clearFix">
-      <router-link to="/pay" class="subBtn">提交订单</router-link>
+      <a href="javascript:" class="subBtn" @click="submitOrder">提交订单</a>
     </div>
     <!-- 地址对话框 -->
     <AddressDialog ref="dialog"/>
@@ -114,7 +115,7 @@
 </template>
 
 <script>
-import { reqAddressList, reqOrder, removeAddress } from '@/api/order'
+import { reqAddressList, reqOrder, removeAddress, reqSubmitOrder } from '@/api/order'
 import AddressDialog from './components/AddressDialog'
 
 export default {
@@ -126,7 +127,9 @@ export default {
       addressList: [],
       // 当前选中地址索引
       selectedIndex: 0,
-      orderInfo: {}
+      orderInfo: {},
+      // 订单备注
+      orderComment: ''
     }
   },
   computed: {
@@ -152,6 +155,34 @@ export default {
       await removeAddress(id)
       // 重新渲染地址列表
       this.getAddressList()
+    },
+    // 修改收货地址
+    updateAddress (address) {
+      // 1. 显示对话框  refs
+      this.$refs.dialog.showDialog = true
+      // 2. 设置formInput的值 [拷贝一份再设置]
+      this.$refs.dialog.formInput = { ...address, isCheckDefault: address.isDefault === '1' }
+    },
+    // 提交订单
+    async submitOrder () {
+      // 1. 准备数据结构
+      const { orderInfo: { tradeNo, detailArrayList }, selectedAddress, orderComment } = this
+      const data = {
+        consignee: selectedAddress.consignee, // 收件人姓名
+        consigneeTel: selectedAddress.phoneNum, // 收件人电话
+        deliveryAddress: selectedAddress.fullAddress, // 收件人地址
+        paymentWay: 'ONLINE', // 支付方式
+        orderComment, // 订单备注
+        orderDetailList: detailArrayList // 订单商品
+      }
+      // console.log(tradeNo, data)
+      // 2. 发起请求提交订单
+      try {
+        const res = await reqSubmitOrder(tradeNo, data)
+        console.log(res)
+      } catch (error) {
+        console.log('提交失败')
+      }
     }
   },
   mounted () {

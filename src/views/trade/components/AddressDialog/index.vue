@@ -1,6 +1,6 @@
 <template>
   <!-- 地址对话框 -->
-  <Dialog title="收货地址" :isShow="showDialog" @hidden="showDialog = false" @ok="submitForm">
+  <Dialog title="收货地址" :isShow="showDialog" @hidden="resetData" @ok="submitForm">
     <form class="sui-form">
       <!-- 收货人 -->
       <div class="control-group">
@@ -49,14 +49,14 @@
 </template>
 
 <script>
-import { reqRegion, reqProvince, addAddress } from '@/api/order'
+import { reqRegion, reqProvince, addAddress, updateAddress } from '@/api/order'
 
 export default {
   name: 'AddressDialog',
   data () {
     return {
       // 显示dialog
-      showDialog: true,
+      showDialog: false,
       // 表单数据
       formInput: {
         regionId: '',
@@ -81,8 +81,13 @@ export default {
     },
     // 获取省份
     async getProvinceList () {
+      // 需求： 修改的第一次不清除  后续需要清除
       // 清除之前选择的省份
-      this.formInput.provinceId = ''
+      if (this.formInput.id === this.addId) {
+        this.formInput.provinceId = ''
+      }
+      // 保存当前ID
+      this.addId = this.formInput.id
       const res = await reqProvince(this.formInput.regionId)
       this.provinceList = res
     },
@@ -91,20 +96,34 @@ export default {
       try {
         // 处理是否为默认地址
         this.formInput.isDefault = this.formInput.isCheckDefault ? '1' : '0'
-        // 发起请求新增地址
-        await addAddress(this.formInput)
+        // 判断当前操作类型
+        if (this.formInput.id) {
+          // 修改
+          // 发起请求修改地址
+          await updateAddress(this.formInput)
+        } else {
+          // 新增
+          // 发起请求新增地址
+          await addAddress(this.formInput)
+        }
         // 调用父组件方法 重新渲染收货地址
         this.$parent.getAddressList()
-        // 关闭对话框
-        this.showDialog = false
-        // 清除form表单内容
-        this.formInput = {
-          regionId: '',
-          provinceId: ''
-        }
+        this.resetData()
       } catch (error) {
         console.log('新增地址失败')
       }
+    },
+    // 重置数据
+    resetData () {
+      // 清除form表单内容
+      this.formInput = {
+        regionId: '',
+        provinceId: ''
+      }
+      // 关闭对话框
+      this.showDialog = false
+      // 清除id
+      this.addId = undefined
     }
   },
   mounted () {

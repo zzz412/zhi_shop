@@ -24,3 +24,6 @@ export const reqRegion = () => request({ url: '/api/user/userAddress/auth/findBa
 
 // 获取省份
 export const reqProvince = id => request({ url: '/api/user/userAddress/auth/findBaseProvinceByRegionId/' + id, method: 'get' })
+
+// 提交订单
+export const reqSubmitOrder = (tradeNo, data) => request({ url: '/api/order/auth/submitOrder?tradeNo=' + tradeNo, method: 'post', data })
