@@ -33,7 +33,7 @@ request.interceptors.response.use(
     // 取出响应结果
     const data = res.data
     // 判断响应码
-    if (data.code !== 200) {
+    if (data.code !== 200 && data.code !== 205) {
       alert(data.message || '响应错误')
       // 判断错误原因【未登录】
       if (data.code === 208) {
@@ -44,7 +44,7 @@ request.interceptors.response.use(
       }
       return Promise.reject(new Error(data.message))
     }
-    return data.data
+    return data.data || data
   },
   // 响应失败
   err => new Promise(new Error(err))

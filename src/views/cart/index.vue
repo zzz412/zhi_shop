@@ -84,7 +84,7 @@
                   <i class="summoney">{{priceTotal}}</i>
               </div>
               <div class="sumbtn">
-                  <router-link to="/trade" class="sum-btn" >结算</router-link>
+                  <a @click="goTarde" href="javascript:" class="sum-btn" >结算</a>
               </div>
             </div>
         </div>
@@ -185,6 +185,13 @@ export default {
       await this.$store.dispatch('cart/deleteChecked')
       // 2. 重新获取购物车
       this.getCartList()
+    },
+    // 进入结算
+    goTarde () {
+      // 1. 判断是否选中了商品
+      if (!this.checkTotal) return
+      // 2. 跳转到结算页
+      this.$router.push('/trade')
     }
   }
 }

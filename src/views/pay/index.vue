@@ -8,8 +8,8 @@
                   <span class="success-info">订单提交成功，请您及时付款，以便尽快为您发货~~</span>
               </h4>
               <div class="paymark">
-                  <span class="fl">请您在提交订单<em class="orange time">4小时</em>之内完成支付，超时订单会自动取消。订单号：<em>145687</em></span>
-                  <span class="fr"><em class="lead">应付金额：</em><em class="orange money">￥17,654</em></span>
+                  <span class="fl">请您在提交订单<em class="orange time">4小时</em>之内完成支付，超时订单会自动取消。订单号：<em>{{$route.query.orderId}}</em></span>
+                  <span class="fr"><em class="lead">应付金额：</em><em class="orange money">￥{{payInfo.totalFee}}</em></span>
               </div>
           </div>
           <div class="checkout-info">
@@ -66,7 +66,7 @@
               <div class="hr"></div>
 
               <div class="submit">
-                  <router-link class="btn" to="/payok">立即支付</router-link>
+                  <a class="btn" href="javascript:" @click="showPay">立即支付</a>
               </div>
               <div class="otherpay">
                   <div class="step-tit">
@@ -79,12 +79,96 @@
               </div>
           </div>
       </div>
+      <Dialog
+        :isShow="isShow"
+        title="扫码支付"
+        cancelText="取消支付"
+        okText="支付成功"
+        @hidden="cancelPay"
+        @ok="payOk"
+        @cancel="cancelPay"
+      >
+        <div class="main">
+          <img :src="qrCodeUrl"/>
+        </div>
+      </Dialog>
   </div>
 </template>
 
 <script>
+import { reqPayInfo, reqPayState } from '@/api/order'
+import QrCode from 'qrcode'
+
 export default {
-  name: 'Pay'
+  name: 'Pay',
+  data () {
+    return {
+      isShow: false,
+      payInfo: {},
+      // 二维码地址
+      qrCodeUrl: ''
+    }
+  },
+  methods: {
+    // 获取支付信息
+    async getPayInfo () {
+      const res = await reqPayInfo(this.$route.query.orderId)
+      this.payInfo = res
+    },
+    // 展示支付二维码
+    async showPay () {
+      // 1. 显示弹窗
+      this.isShow = true
+      // 2. 使用JS 将【支付地址】字符串转为二维码  (qrcode)
+      const url = await QrCode.toDataURL(this.payInfo.codeUrl)
+      this.qrCodeUrl = url
+      // 3. 每隔1s请求一次 支付状态
+      this.timer = setInterval(async () => {
+        const { code } = await reqPayState(this.$route.query.orderId)
+        // 保存支付状态
+        this.payCode = code
+        // 判断是否支付成功
+        if (code === 200) {
+          // 跳转支付成功页
+          this.$router.push('/payok')
+        }
+      }, 2000)
+    },
+    // 支付成功
+    payOk () {
+      // code为200则支付成功  为205则未支付
+      if (this.payCode === 200) {
+        // 跳转支付成功页
+        this.$router.push('/payok')
+      } else {
+        // 提示未支付
+        alert('未支付')
+      }
+    },
+    // 取消支付
+    cancelPay () {
+      // 1. 关闭定时器
+      this.timer && clearInterval(this.timer)
+      // 2. 关闭支付框
+      this.isShow = false
+    }
+  },
+  mounted () {
+    this.getPayInfo()
+  },
+  beforeDestroy () {
+    // 1. 关闭定时器
+    this.timer && clearInterval(this.timer)
+  },
+  // 路由进入前
+  beforeRouteEnter (to, from, next) {
+    // 只能从订单页进入 其他页面禁止跳转
+    if (from.path === '/trade') {
+      next()
+    } else {
+      next(false)
+    }
+  }
 }
 </script>
 
@@ -212,6 +296,12 @@ export default {
               text-decoration: none;
           }
       }
+  }
+}
+.main {
+  text-align: center;
+  img {
+    width: 200px;
   }
 }
 </style>

@@ -27,3 +27,9 @@ export const reqProvince = id => request({ url: '/api/user/userAddress/auth/find
 
 // 提交订单
 export const reqSubmitOrder = (tradeNo, data) => request({ url: '/api/order/auth/submitOrder?tradeNo=' + tradeNo, method: 'post', data })
+
+// 获取支付信息
+export const reqPayInfo = id => request({ url: '/api/payment/weixin/createNative/' + id, method: 'get' })
+
+// 获取支付状态
+export const reqPayState = id => request({ url: '/api/payment/weixin/queryPayStatus/' + id, method: 'get' })

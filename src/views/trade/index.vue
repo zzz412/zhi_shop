@@ -180,6 +180,8 @@ export default {
       try {
         const res = await reqSubmitOrder(tradeNo, data)
         console.log(res)
+        // 3. 跳转到支付页面
+        this.$router.push('/pay?orderId=' + res)
       } catch (error) {
         console.log('提交失败')
       }
@@ -188,6 +190,15 @@ export default {
   mounted () {
     this.getAddressList()
     this.getOrderInfo()
+  },
+  // 路由进入前
+  beforeRouteEnter (to, from, next) {
+    // 只能从购物车页进入 其他页面禁止跳转
+    if (from.path === '/cart') {
+      next()
+    } else {
+      next(false)
+    }
   }
 }
 </script>

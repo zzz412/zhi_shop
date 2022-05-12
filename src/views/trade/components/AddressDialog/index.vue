@@ -81,6 +81,8 @@ export default {
     },
     // 获取省份
     async getProvinceList () {
+      // 如果没有地区id则不查询
+      if (!this.formInput.regionId) return
       // 需求： 修改的第一次不清除  后续需要清除
       // 清除之前选择的省份
       if (this.formInput.id === this.addId) {
